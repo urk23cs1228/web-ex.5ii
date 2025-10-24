@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Loan EMI Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background: #fff;
+      border: 2px solid #007bff;
+      border-radius: 10px;
+      padding: 20px;
+      width: 320px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      margin-bottom: 15px;
+    }
+    .result {
+      background: #007bff;
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+      margin: 8px 0;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Loan EMI Calculator</h2>
+
+    <label for="loan">Loan Amount (Rs.):</label>
+    <input type="number" id="loan" placeholder="Enter loan amount">
+
+    <label for="rate">Annual Interest Rate (%):</label>
+    <input type="number" id="rate" placeholder="Enter rate">
+
+    <label for="tenure">Tenure (Years):</label>
+    <input type="number" id="tenure" placeholder="Enter tenure">
+
+    <div class="result" id="loanAmount">Loan Amount: ₹0</div>
+    <div class="result" id="totalInterest">Total Interest: ₹0</div>
+    <div class="result" id="emi">EMI: ₹0</div>
+    <div class="result" id="totalRepay">Total Repayment: ₹0</div>
+  </div>
+
+  <script>
+    // Get elements
+    let loanInput = document.getElementById("loan");
+    let rateInput = document.getElementById("rate");
+    let tenureInput = document.getElementById("tenure");
+
+    let loanAmountDiv = document.getElementById("loanAmount");
+    let totalInterestDiv = document.getElementById("totalInterest");
+    let emiDiv = document.getElementById("emi");
+    let totalRepayDiv = document.getElementById("totalRepay");
+
+    // Add event listeners (oninput)
+    loanInput.oninput = calculateEMI;
+    rateInput.oninput = calculateEMI;
+    tenureInput.oninput = calculateEMI;
+
+    function calculateEMI() {
+      let P = parseFloat(loanInput.value) || 0;    // Loan amount
+      let annualRate = parseFloat(rateInput.value) || 0; 
+      let years = parseFloat(tenureInput.value) || 0;
+
+      let R = annualRate / 12 / 100;   // Monthly interest rate
+      let N = years * 12;              // Tenure in months
+
+      let EMI = 0;
+      if (R > 0 && N > 0) {
+        EMI = (P * R * Math.pow(1 + R, N)) / (Math.pow(1 + R, N) - 1);
+      }
+
+      let totalRepayment = EMI * N;
+      let totalInterest = totalRepayment - P;
+
+      // Update DOM
+      loanAmountDiv.innerHTML = "Loan Amount: ₹" + P.toLocaleString();
+      totalInterestDiv.innerHTML = "Total Interest: ₹" + Math.round(totalInterest).toLocaleString();
+      emiDiv.innerHTML = "EMI: ₹" + Math.round(EMI).toLocaleString();
+      totalRepayDiv.innerHTML = "Total Repayment: ₹" + Math.round(totalRepayment).toLocaleString();
+    }
+  </script>
+
+</body>
+</html>
+
+    }
